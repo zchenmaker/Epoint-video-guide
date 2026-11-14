@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>视频技能包内容预览</title>
+    <style>
+      :root {
+        --ink: #0f172a;
+        --body: #475569;
+        --muted: #8491a3;
+        --line: #e5eaf2;
+        --soft: #f8fafc;
+        --blue: #2563eb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      body {
+        background: transparent;
+        display: grid;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
+        min-height: 680px;
+        min-width: 980px;
+        place-items: center;
+      }
+
+      .pack-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f2;
+        border-radius: 16px;
+        box-shadow: 0 18px 40px rgba(24, 39, 75, 0.08);
+        overflow: hidden;
+        width: 940px;
+      }
+
+      .pack-head {
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        padding: 18px 28px;
+      }
+
+      .pack-brand {
+        align-items: center;
+        display: flex;
+        gap: 12px;
+      }
+
+      .pack-mark {
+        align-items: center;
+        background: var(--blue);
+        border-radius: 9px;
+        color: #ffffff;
+        display: grid;
+        font-size: 20px;
+        font-weight: 900;
+        height: 38px;
+        place-items: center;
+        position: relative;
+        width: 38px;
+      }
+
+      .pack-mark i {
+        background: #ef4444;
+        border-radius: 50%;
+        height: 6px;
+        position: absolute;
+        right: 6px;
+        top: 6px;
+        width: 6px;
+      }
+
+      .pack-name {
+        color: var(--ink);
+        font-size: 17px;
+        font-weight: 800;
+      }
+
+      .pack-ver {
+        background: #eff6ff;
+        border-radius: 5px;
+        color: #1d4ed8;
+        font-size: 11.5px;
+        font-style: normal;
+        font-weight: 700;
+        margin-left: 8px;
+        padding: 2px 7px;
+        vertical-align: 2px;
+      }
+
+      .pack-meta {
+        color: var(--muted);
+        display: flex;
+        font-size: 13px;
+        gap: 16px;
+      }
+
+      .pack-meta b {
+        color: #334155;
+        font-weight: 700;
+      }
+
+      .pack-pair {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 22px 28px 0;
+      }
+
+      .pack-item {
+        background: var(--soft);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 18px 20px 20px;
+      }
+
+      .pack-item-top {
+        align-items: center;
+        display: flex;
+        gap: 8px;
+      }
+
+      .pack-badge {
+        background: #eef2f7;
+        border-radius: 5px;
+        color: #475569;
+        font-size: 11.5px;
+        font-weight: 700;
+        padding: 3px 8px;
+      }
+
+      .is-th {
+        background: #e0edff;
+        color: #1d4ed8;
+      }
+
+      .is-demo {
+        background: #e8f7f1;
+        color: #0f766e;
+      }
+
+      .pack-item h4 {
+        color: var(--ink);
+        font-size: 17px;
+        font-weight: 800;
+        margin: 0;
+      }
+
+      .pack-item p {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .pack-facts {
+        display: grid;
+        gap: 4px;
+        list-style: none;
+        margin: 2px 0 0;
+        padding: 0;
+      }
+
+      .pack-facts li {
+        color: var(--body);
+        font-size: 12.5px;
+      }
+
+      .pack-facts b {
+        color: var(--ink);
+        font-weight: 700;
+      }
+
+      .pack-dl {
+        align-items: center;
+        align-self: flex-start;
+        background: var(--blue);
+        border-radius: 7px;
+        color: #ffffff;
+        display: inline-flex;
+        font-size: 12.5px;
+        font-weight: 700;
+        gap: 7px;
+        margin-top: auto;
+        padding: 8px 15px;
+        text-decoration: none;
+      }
+
+      .pack-dl svg {
+        fill: none;
+        height: 14px;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+        width: 14px;
+      }
+
+      .pack-struct {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        margin: 18px 28px 0;
+        overflow: hidden;
+      }
+
+      .pack-struct-head {
+        align-items: center;
+        background: #fbfcfe;
+        border-bottom: 1px solid var(--line);
+        color: #334155;
+        display: flex;
+        font-size: 12.5px;
+        font-weight: 700;
+        justify-content: space-between;
+        padding: 9px 16px;
+      }
+
+      .pack-struct-head span {
+        color: var(--muted);
+        font-weight: 400;
+      }
+
+      .pack-tree {
+        display: grid;
+        gap: 6px 30px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 14px 18px 16px;
+      }
+
+      .tree-dir {
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .tree-file {
+        color: var(--muted);
+        display: flex;
+        font-size: 12.5px;
+        justify-content: space-between;
+        padding-left: 15px;
+      }
+
+      .tree-file b {
+        color: var(--body);
+        font-weight: 500;
+      }
+
+      .pack-foot {
+        align-items: center;
+        background: #fbfcfe;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        margin-top: 18px;
+        padding: 14px 28px;
+      }
+
+      .pack-logos {
+        align-items: center;
+        display: flex;
+        gap: 9px;
+      }
+
+      .pack-logos span {
+        align-items: center;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        display: flex;
+        height: 34px;
+        justify-content: center;
+        width: 78px;
+      }
+
+      .pack-logos span.is-dark {
+        background: #0f172a;
+        border-color: #0f172a;
+      }
+
+      .pack-logos img {
+        display: block;
+        height: 15px;
+        width: auto;
+      }
+
+      .pack-foot small {
+        color: var(--muted);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pack-card">
+      <div class="pack-head">
+        <div class="pack-brand">
+          <span class="pack-mark">E<i></i></span>
+          <div>
+            <span class="pack-name">视频技能包</span><em class="pack-ver">V1.02</em>
+          </div>
+        </div>
+        <div class="pack-meta">
+          <span><b>2</b> 个 zip</span>
+          <span><b>10</b> 个文件</span>
+          <span><b>17</b> 件产物</span>
+        </div>
+      </div>
+
+      <div class="pack-pair">
+        <article class="pack-item">
+          <div class="pack-item-top">
+            <span class="pack-badge is-th">口播视频</span>
+            <span class="pack-badge">≤3 分钟</span>
+          </div>
+          <h4>口播技能包</h4>
+          <p>全片 AI 数字人念稿，文案贴进去就出逐字稿。</p>
+          <ul class="pack-facts">
+            <li><b>62.7 KB</b> · 5 个文件</li>
+            <li><b>8 件套</b> · 逐字稿 / 分镜 / 字幕</li>
+          </ul>
+          <a class="pack-dl" href="downloads/epoint-video-talkinghead-v1.02.zip" download>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"></path></svg>
+            <span>下载 zip</span>
+          </a>
+        </article>
+
+        <article class="pack-item">
+          <div class="pack-item-top">
+            <span class="pack-badge is-demo">简易演示</span>
+            <span class="pack-badge">≤5 分钟</span>
+          </div>
+          <h4>演示技能包</h4>
+          <p>员工自己录屏，AI 特效只补关键动作。</p>
+          <ul class="pack-facts">
+            <li><b>57.3 KB</b> · 5 个文件</li>
+            <li><b>9 件套</b> · 录屏清单 / 特效词 / 分镜</li>
+          </ul>
+          <a class="pack-dl" href="downloads/epoint-video-demo-v1.02.zip" download>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"></path></svg>
+            <span>下载 zip</span>
+          </a>
+        </article>
+      </div>
+
+      <div class="pack-struct">
+        <div class="pack-struct-head">包内结构 <span>解压后一共 10 个文件，不含任何插件与安装程序</span></div>
+        <div class="pack-tree">
+          <div class="tree-dir">epoint-video-talkinghead/</div>
+          <div class="tree-dir">epoint-video-demo/</div>
+          <div class="tree-file"><b>SKILL.md</b><span>技能主文件</span></div>
+          <div class="tree-file"><b>SKILL.md</b><span>技能主文件</span></div>
+          <div class="tree-file"><b>assets/</b><span>4 张品牌切片</span></div>
+          <div class="tree-file"><b>assets/</b><span>4 张品牌切片</span></div>
+          <div class="tree-file"><b>运行后产出</b><span>8 件成套文件</span></div>
+          <div class="tree-file"><b>运行后产出</b><span>9 件成套文件</span></div>
+        </div>
+      </div>
+
+      <div class="pack-foot">
+        <div class="pack-logos">
+          <span><img src="assets/epoint-logo-full.png" alt="新点软件完整标"></span>
+          <span class="is-dark"><img src="assets/epoint-logo-full-white.png" alt="新点软件完整标反白"></span>
+          <span><img src="assets/epoint-logo-en.png" alt="新点软件英文标"></span>
+          <span class="is-dark"><img src="assets/epoint-logo-en-white.png" alt="新点软件英文标反白"></span>
+        </div>
+        <small>四张品牌切片 · 透明底 PNG · 直接用在片头片尾</small>
+      </div>
+    </div>
+  </body>
+</html>
