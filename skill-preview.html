@@ -578,6 +578,8 @@
           <div class="reel" data-reel="a">
             <video
               data-video="a"
+              data-preview="outro-a-960.mp4"
+              data-poster="assets/preview/outro-a.jpg"
               src="assets/preview/outro-a-960.mp4?v=3"
               poster="assets/preview/outro-a.jpg"
               preload="metadata"
@@ -603,6 +605,8 @@
           <div class="reel" data-reel="b">
             <video
               data-video="b"
+              data-preview="outro-b-960.mp4"
+              data-poster="assets/preview/outro-b.jpg"
               src="assets/preview/outro-b-960.mp4?v=3"
               poster="assets/preview/outro-b.jpg"
               preload="metadata"
@@ -631,6 +635,58 @@
         var panels = Array.prototype.slice.call(document.querySelectorAll('[data-panel]'));
         var reels = Array.prototype.slice.call(document.querySelectorAll('[data-reel]'));
         if (!tabs.length || !panels.length) return;
+
+        // ---- 预览片改走公共 CDN -------------------------------------------------
+        // github.io 在国内只有 ~17KB/s，1.4MB 的片子边下边播必然卡；jsDelivr 同文件 ~300KB/s。
+        // 内网域名、localhost、file: 打开时直接用同目录文件，不绕公网。
+        // 以后换预览片：把下面这行的 commit 换成新提交的 sha，否则 CDN 取到的还是旧文件。
+        var CDN_DIR = 'https://cdn.jsdelivr.net/gh/zchenmaker/Epoint-video-guide@e5cc7a6/assets/preview/';
+        // 只有从 *.github.io 打开时才走 CDN；内网域名、localhost、file: 一律用同目录文件
+        var privateHost = !/(^|\.)github\.io$/.test(location.hostname);
+        var previewVideos = Array.prototype.slice.call(document.querySelectorAll('video[data-preview]'));
+
+        previewVideos.forEach(function (video) {
+          if (privateHost) {
+            // file: 协议下带 ?v= 会 404，去掉查询串再加载
+            if (location.protocol === 'file:') {
+              video.setAttribute('src', (video.getAttribute('src') || '').split('?')[0]);
+              video.load();
+            }
+            return;
+          }
+          var name = video.getAttribute('data-preview');
+          var posterPath = video.getAttribute('data-poster');
+          var localSrc = video.getAttribute('src');
+
+          function useLocal() {
+            if (video.getAttribute('data-fallback')) return;
+            video.setAttribute('data-fallback', '1');
+            video.setAttribute('src', localSrc);
+            if (posterPath) video.setAttribute('poster', posterPath);
+            video.load();
+          }
+
+          // CDN 完全没回数据（被墙 / DNS 污染）才退回本地；只是慢就继续等，本地只会更慢
+          var timer = setTimeout(function () {
+            if (video.readyState === 0) useLocal();
+          }, 5000);
+
+          video.addEventListener('error', useLocal);
+          video.addEventListener('loadeddata', function () { clearTimeout(timer); });
+
+          video.setAttribute('src', CDN_DIR + name);
+          if (posterPath) video.setAttribute('poster', CDN_DIR + posterPath.split('/').pop());
+          video.load();
+        });
+
+        // 首屏稳定后再预热（两支共 1.9MB，CDN 下约 6 秒），切到片尾标签即播
+        setTimeout(function () {
+          previewVideos.forEach(function (video) {
+            if (video.getAttribute('data-fallback')) return;
+            video.preload = 'auto';
+            video.load();
+          });
+        }, 1800);
 
         function reelOf(key) {
           return document.querySelector('[data-reel="' + key + '"]');
