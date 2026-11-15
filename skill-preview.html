@@ -12,6 +12,7 @@
         --line: #e5eaf2;
         --soft: #f8fafc;
         --blue: #2563eb;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       }
 
       * {
@@ -43,67 +44,69 @@
         width: 940px;
       }
 
+      /* ---------- 卡头 ---------- */
       .pack-head {
         align-items: center;
         border-bottom: 1px solid var(--line);
         display: flex;
+        gap: 16px;
         justify-content: space-between;
-        padding: 18px 28px;
+        padding: 14px 28px;
       }
 
       .pack-brand {
         align-items: center;
         display: flex;
         gap: 12px;
+        min-width: 0;
       }
 
       .pack-mark {
         align-items: center;
-        background: var(--blue);
-        border-radius: 9px;
-        color: #ffffff;
+        background: #ffffff;
+        border: 1px solid #e3e8f1;
+        border-radius: 10px;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
         display: grid;
-        font-size: 20px;
-        font-weight: 900;
+        flex: 0 0 auto;
         height: 38px;
         place-items: center;
-        position: relative;
         width: 38px;
       }
 
-      .pack-mark i {
-        background: #ef4444;
-        border-radius: 50%;
-        height: 6px;
-        position: absolute;
-        right: 6px;
-        top: 6px;
-        width: 6px;
+      .pack-mark img {
+        display: block;
+        height: 24px;
+        width: 24px;
       }
 
       .pack-name {
         color: var(--ink);
+        display: block;
         font-size: 17px;
         font-weight: 800;
+        line-height: 1.25;
       }
 
       .pack-ver {
         background: #eff6ff;
         border-radius: 5px;
         color: #1d4ed8;
-        font-size: 11.5px;
+        font-size: 11px;
         font-style: normal;
         font-weight: 700;
         margin-left: 8px;
-        padding: 2px 7px;
+        padding: 2px 6px;
         vertical-align: 2px;
       }
 
       .pack-meta {
         color: var(--muted);
         display: flex;
-        font-size: 13px;
-        gap: 16px;
+        font-size: 11.5px;
+        gap: 12px;
+        line-height: 1.45;
+        margin-top: 3px;
       }
 
       .pack-meta b {
@@ -111,11 +114,81 @@
         font-weight: 700;
       }
 
+      /* ---------- 切换标签 ---------- */
+      .tabs {
+        background: #f4f7fb;
+        border-radius: 9px;
+        display: flex;
+        flex: 0 0 auto;
+        gap: 2px;
+        padding: 3px;
+      }
+
+      .tab {
+        align-items: baseline;
+        background: transparent;
+        border: 0;
+        border-radius: 7px;
+        color: #64748b;
+        cursor: pointer;
+        display: flex;
+        font-family: inherit;
+        font-size: 12.5px;
+        font-weight: 700;
+        gap: 5px;
+        padding: 6px 11px;
+        transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+        white-space: nowrap;
+      }
+
+      .tab em {
+        color: #a3b0c0;
+        font-family: var(--mono);
+        font-size: 9.5px;
+        font-style: normal;
+        font-weight: 500;
+      }
+
+      .tab:hover {
+        color: #334155;
+      }
+
+      .tab.is-active {
+        background: #ffffff;
+        box-shadow: 0 1px 3px rgba(24, 39, 75, 0.12);
+        color: var(--blue);
+      }
+
+      .tab.is-active em {
+        color: #7ba3ea;
+      }
+
+      /* ---------- 面板堆叠（高度取最高一屏，切换不跳动） ---------- */
+      .panels {
+        display: grid;
+      }
+
+      .panel {
+        grid-area: 1 / 1;
+        min-width: 0;
+      }
+
+      .panel:not(.is-active) {
+        pointer-events: none;
+        visibility: hidden;
+      }
+
+      /* 包内容这一屏：底部品牌条压到卡片下沿，避免下方留白 */
+      .panel-pack {
+        display: flex;
+        flex-direction: column;
+      }
+
       .pack-pair {
         display: grid;
         gap: 16px;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        padding: 22px 28px 0;
+        padding: 30px 28px 0;
       }
 
       .pack-item {
@@ -124,7 +197,7 @@
         border-radius: 12px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
         padding: 18px 20px 20px;
       }
 
@@ -200,6 +273,10 @@
         text-decoration: none;
       }
 
+      .pack-dl:hover {
+        background: #1d4ed8;
+      }
+
       .pack-dl svg {
         fill: none;
         height: 14px;
@@ -213,7 +290,7 @@
       .pack-struct {
         border: 1px solid var(--line);
         border-radius: 12px;
-        margin: 18px 28px 0;
+        margin: 24px 28px 0;
         overflow: hidden;
       }
 
@@ -238,7 +315,7 @@
         display: grid;
         gap: 6px 30px;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        padding: 14px 18px 16px;
+        padding: 18px 18px 24px;
       }
 
       .tree-dir {
@@ -266,41 +343,152 @@
         border-top: 1px solid var(--line);
         display: flex;
         justify-content: space-between;
-        margin-top: 18px;
+        margin-top: auto;
         padding: 14px 28px;
       }
 
-      .pack-logos {
+      .pack-foot-key {
         align-items: center;
-        display: flex;
-        gap: 9px;
+        color: var(--body);
+        display: inline-flex;
+        flex: 0 0 auto;
+        font-size: 12.5px;
+        font-weight: 700;
+        gap: 7px;
       }
 
-      .pack-logos span {
-        align-items: center;
-        background: #ffffff;
-        border: 1px solid var(--line);
-        border-radius: 6px;
-        display: flex;
-        height: 34px;
-        justify-content: center;
-        width: 78px;
-      }
-
-      .pack-logos span.is-dark {
-        background: #0f172a;
-        border-color: #0f172a;
-      }
-
-      .pack-logos img {
-        display: block;
-        height: 15px;
-        width: auto;
+      .pack-foot-key i {
+        background: #eef2f8;
+        border-radius: 4px;
+        color: #64748b;
+        font-size: 10.5px;
+        font-style: normal;
+        font-weight: 600;
+        padding: 2px 6px;
       }
 
       .pack-foot small {
         color: var(--muted);
         font-size: 12px;
+      }
+
+      /* ---------- 片尾播放 ---------- */
+      .panel-video {
+        display: grid;
+        padding: 0;
+      }
+
+      /* 扁平播放器：无边框、无阴影、无圆角，画面直接与卡片融合 */
+      .reel {
+        background: #f4f6fa;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+      }
+
+      .reel video {
+        display: block;
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+      }
+
+      .reel-toggle {
+        background: rgba(15, 23, 42, 0.55);
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+        height: 62px;
+        left: 50%;
+        margin: -31px 0 0 -31px;
+        place-items: center;
+        position: absolute;
+        top: 50%;
+        width: 62px;
+      }
+
+      .reel.is-paused .reel-toggle {
+        display: grid;
+      }
+
+      .reel-toggle svg {
+        fill: #ffffff;
+        height: 19px;
+        margin-left: 3px;
+        width: 19px;
+      }
+
+      .reel-bar {
+        align-items: center;
+        bottom: 12px;
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        left: 12px;
+        pointer-events: none;
+        position: absolute;
+        right: 12px;
+      }
+
+      .reel-tag,
+      .reel-dl,
+      .reel-sound {
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+        background: rgba(15, 23, 42, 0.55);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 18px;
+        color: #ffffff;
+        font-size: 11px;
+        padding: 5px 12px;
+        pointer-events: auto;
+      }
+
+      .reel-tag b {
+        font-weight: 700;
+      }
+
+      .reel-tag span {
+        color: rgba(255, 255, 255, 0.72);
+        margin-left: 6px;
+      }
+
+      .reel-dl {
+        align-items: center;
+        display: inline-flex;
+        flex: 0 0 auto;
+        font-weight: 600;
+        gap: 5px;
+        margin-left: auto;
+        text-decoration: none;
+      }
+
+      .reel-dl:hover,
+      .reel-sound:hover {
+        background: rgba(15, 23, 42, 0.8);
+      }
+
+      .reel-dl svg {
+        fill: none;
+        height: 12px;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2;
+        width: 12px;
+      }
+
+      .reel-sound {
+        cursor: pointer;
+        display: none;
+        font-family: inherit;
+        font-weight: 600;
+      }
+
+      .reel.is-muted .reel-sound {
+        display: inline-flex;
       }
     </style>
   </head>
@@ -308,77 +496,245 @@
     <div class="pack-card">
       <div class="pack-head">
         <div class="pack-brand">
-          <span class="pack-mark">E<i></i></span>
+          <span class="pack-mark"><img src="assets/icon48.png" alt=""></span>
           <div>
-            <span class="pack-name">视频技能包</span><em class="pack-ver">V1.02</em>
+            <span class="pack-name">视频技能包<em class="pack-ver">V1.03</em></span>
+            <div class="pack-meta">
+              <span><b>2</b> 个 zip</span>
+              <span><b>2</b> 支片尾</span>
+              <span><b>17</b> 件产物</span>
+            </div>
           </div>
         </div>
-        <div class="pack-meta">
-          <span><b>2</b> 个 zip</span>
-          <span><b>10</b> 个文件</span>
-          <span><b>17</b> 件产物</span>
+
+        <div class="tabs" role="tablist" aria-label="预览切换">
+          <button class="tab is-active" type="button" role="tab" aria-selected="true" data-tab="pack">技能概要</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="a">片尾 01 · 白底<em>00:10</em></button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="b">片尾 02 · 蓝图<em>00:20</em></button>
         </div>
       </div>
 
-      <div class="pack-pair">
-        <article class="pack-item">
-          <div class="pack-item-top">
-            <span class="pack-badge is-th">口播视频</span>
-            <span class="pack-badge">≤3 分钟</span>
+      <div class="panels">
+        <!-- ① 包内容 -->
+        <div class="panel panel-pack is-active" data-panel="pack">
+          <div class="pack-pair">
+            <article class="pack-item">
+              <div class="pack-item-top">
+                <span class="pack-badge is-th">口播视频</span>
+                <span class="pack-badge">≤3 分钟</span>
+              </div>
+              <h4>口播技能包</h4>
+              <p>全片由预设口播数字人念稿，文案贴进去就出逐字稿。</p>
+              <ul class="pack-facts">
+                <li><b>62.7 KB</b> · 5 个文件</li>
+                <li><b>8 件套</b> · 逐字稿 / 分镜 / 字幕</li>
+              </ul>
+              <a class="pack-dl" href="downloads/epoint-video-talkinghead-v1.03.zip" download>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"></path></svg>
+                <span>下载 zip</span>
+              </a>
+            </article>
+
+            <article class="pack-item">
+              <div class="pack-item-top">
+                <span class="pack-badge is-demo">简易演示</span>
+                <span class="pack-badge">≤5 分钟</span>
+              </div>
+              <h4>演示技能包</h4>
+              <p>员工自己录屏，AI 特效只补关键动作。</p>
+              <ul class="pack-facts">
+                <li><b>57.3 KB</b> · 5 个文件</li>
+                <li><b>9 件套</b> · 录屏清单 / 特效词 / 分镜</li>
+              </ul>
+              <a class="pack-dl" href="downloads/epoint-video-demo-v1.03.zip" download>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"></path></svg>
+                <span>下载 zip</span>
+              </a>
+            </article>
           </div>
-          <h4>口播技能包</h4>
-          <p>全片 AI 数字人念稿，文案贴进去就出逐字稿。</p>
-          <ul class="pack-facts">
-            <li><b>62.7 KB</b> · 5 个文件</li>
-            <li><b>8 件套</b> · 逐字稿 / 分镜 / 字幕</li>
-          </ul>
-          <a class="pack-dl" href="downloads/epoint-video-talkinghead-v1.02.zip" download>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"></path></svg>
-            <span>下载 zip</span>
-          </a>
-        </article>
 
-        <article class="pack-item">
-          <div class="pack-item-top">
-            <span class="pack-badge is-demo">简易演示</span>
-            <span class="pack-badge">≤5 分钟</span>
+          <div class="pack-struct">
+            <div class="pack-struct-head">包内结构 <span>解压后一共 10 个文件，不含任何插件与安装程序</span></div>
+            <div class="pack-tree">
+              <div class="tree-dir">epoint-video-talkinghead/</div>
+              <div class="tree-dir">epoint-video-demo/</div>
+              <div class="tree-file"><b>SKILL.md</b><span>技能主文件</span></div>
+              <div class="tree-file"><b>SKILL.md</b><span>技能主文件</span></div>
+              <div class="tree-file"><b>assets/</b><span>4 张品牌切片</span></div>
+              <div class="tree-file"><b>assets/</b><span>4 张品牌切片</span></div>
+              <div class="tree-file"><b>运行后产出</b><span>8 件成套文件</span></div>
+              <div class="tree-file"><b>运行后产出</b><span>9 件成套文件</span></div>
+            </div>
           </div>
-          <h4>演示技能包</h4>
-          <p>员工自己录屏，AI 特效只补关键动作。</p>
-          <ul class="pack-facts">
-            <li><b>57.3 KB</b> · 5 个文件</li>
-            <li><b>9 件套</b> · 录屏清单 / 特效词 / 分镜</li>
-          </ul>
-          <a class="pack-dl" href="downloads/epoint-video-demo-v1.02.zip" download>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"></path></svg>
-            <span>下载 zip</span>
-          </a>
-        </article>
-      </div>
 
-      <div class="pack-struct">
-        <div class="pack-struct-head">包内结构 <span>解压后一共 10 个文件，不含任何插件与安装程序</span></div>
-        <div class="pack-tree">
-          <div class="tree-dir">epoint-video-talkinghead/</div>
-          <div class="tree-dir">epoint-video-demo/</div>
-          <div class="tree-file"><b>SKILL.md</b><span>技能主文件</span></div>
-          <div class="tree-file"><b>SKILL.md</b><span>技能主文件</span></div>
-          <div class="tree-file"><b>assets/</b><span>4 张品牌切片</span></div>
-          <div class="tree-file"><b>assets/</b><span>4 张品牌切片</span></div>
-          <div class="tree-file"><b>运行后产出</b><span>8 件成套文件</span></div>
-          <div class="tree-file"><b>运行后产出</b><span>9 件成套文件</span></div>
+          <div class="pack-foot">
+            <span class="pack-foot-key">品牌切片 <i>每包 4 张</i></span>
+            <small>中英文标 · 原色与反白 · 透明底 PNG，直接用在片头片尾</small>
+          </div>
         </div>
-      </div>
 
-      <div class="pack-foot">
-        <div class="pack-logos">
-          <span><img src="assets/epoint-logo-full.png" alt="新点软件完整标"></span>
-          <span class="is-dark"><img src="assets/epoint-logo-full-white.png" alt="新点软件完整标反白"></span>
-          <span><img src="assets/epoint-logo-en.png" alt="新点软件英文标"></span>
-          <span class="is-dark"><img src="assets/epoint-logo-en-white.png" alt="新点软件英文标反白"></span>
+        <!-- ② 片尾 01 · 白底 -->
+        <div class="panel panel-video" data-panel="a">
+          <div class="reel" data-reel="a">
+            <video
+              data-video="a"
+              src="assets/preview/outro-a-960.mp4"
+              poster="assets/preview/outro-a.jpg"
+              preload="metadata"
+              playsinline
+              loop
+            ></video>
+            <button class="reel-toggle" type="button" data-toggle="a" aria-label="播放或暂停">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2 19 12 8 18.8z"></path></svg>
+            </button>
+            <div class="reel-bar">
+              <span class="reel-tag"><b>片尾 01 · 白底</b><span>9.9 秒 · 1920×1080 · 含音轨</span></span>
+              <button class="reel-sound" type="button" data-sound="a">开启声音</button>
+              <a class="reel-dl" href="downloads/epoint-outro-01-white-1080p.mp4" download>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"></path></svg>
+                下载 1080p 原片
+              </a>
+            </div>
+          </div>
         </div>
-        <small>四张品牌切片 · 透明底 PNG · 直接用在片头片尾</small>
+
+        <!-- ③ 片尾 02 · 蓝图 -->
+        <div class="panel panel-video" data-panel="b">
+          <div class="reel" data-reel="b">
+            <video
+              data-video="b"
+              src="assets/preview/outro-b-960.mp4"
+              poster="assets/preview/outro-b.jpg"
+              preload="metadata"
+              playsinline
+              loop
+            ></video>
+            <button class="reel-toggle" type="button" data-toggle="b" aria-label="播放或暂停">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2 19 12 8 18.8z"></path></svg>
+            </button>
+            <div class="reel-bar">
+              <span class="reel-tag"><b>片尾 02 · 蓝图</b><span>20.0 秒 · 1920×1080 · 含音轨</span></span>
+              <button class="reel-sound" type="button" data-sound="b">开启声音</button>
+              <a class="reel-dl" href="downloads/epoint-outro-02-blueprint-1080p.mp4" download>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"></path></svg>
+                下载 1080p 原片
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <script>
+      (function () {
+        var tabs = Array.prototype.slice.call(document.querySelectorAll('[data-tab]'));
+        var panels = Array.prototype.slice.call(document.querySelectorAll('[data-panel]'));
+        var reels = Array.prototype.slice.call(document.querySelectorAll('[data-reel]'));
+        if (!tabs.length || !panels.length) return;
+
+        function reelOf(key) {
+          return document.querySelector('[data-reel="' + key + '"]');
+        }
+
+        function markPaused(reel, paused) {
+          if (!reel) return;
+          reel.classList.toggle('is-paused', paused);
+        }
+
+        function playReel(key) {
+          var reel = reelOf(key);
+          if (!reel) return;
+          var video = reel.querySelector('video');
+          if (!video) return;
+
+          video.muted = false;
+          var p = video.play();
+          if (!p || !p.then) return;
+
+          p.then(function () {
+            reel.classList.remove('is-muted');
+            markPaused(reel, false);
+          }).catch(function () {
+            // 浏览器拦截带声音的自动播放：先静音播起来，给一个开声音的入口
+            video.muted = true;
+            var q = video.play();
+            if (q && q.then) {
+              q.then(function () {
+                reel.classList.add('is-muted');
+                markPaused(reel, false);
+              }).catch(function () {
+                markPaused(reel, true);
+              });
+            }
+          });
+        }
+
+        function activate(key) {
+          tabs.forEach(function (tab) {
+            var on = tab.getAttribute('data-tab') === key;
+            tab.classList.toggle('is-active', on);
+            tab.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+
+          panels.forEach(function (panel) {
+            var on = panel.getAttribute('data-panel') === key;
+            panel.classList.toggle('is-active', on);
+          });
+
+          reels.forEach(function (reel) {
+            if (reel.getAttribute('data-reel') === key) return;
+            var v = reel.querySelector('video');
+            if (!v) return;
+            v.pause();
+            reel.classList.remove('is-muted');
+            markPaused(reel, true);
+          });
+
+          if (key === 'pack') return;
+          playReel(key);
+        }
+
+        tabs.forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            activate(tab.getAttribute('data-tab'));
+          });
+        });
+
+        reels.forEach(function (reel) {
+          var key = reel.getAttribute('data-reel');
+          var video = reel.querySelector('video');
+          var toggle = reel.querySelector('[data-toggle]');
+          var sound = reel.querySelector('[data-sound]');
+          if (!video) return;
+
+          markPaused(reel, true);
+          video.addEventListener('play', function () {
+            markPaused(reel, false);
+          });
+          video.addEventListener('pause', function () {
+            markPaused(reel, true);
+          });
+
+          if (toggle) {
+            toggle.addEventListener('click', function () {
+              if (video.paused) playReel(key);
+              else video.pause();
+            });
+          }
+
+          if (sound) {
+            sound.addEventListener('click', function () {
+              video.muted = false;
+              reel.classList.remove('is-muted');
+              if (video.paused) playReel(key);
+            });
+          }
+        });
+
+        // ?tab=pack|a|b 直接落到某一屏
+        var qt = (location.search.match(/[?&]tab=(pack|a|b)/) || [])[1];
+        if (qt && qt !== 'pack') activate(qt);
+      })();
+    </script>
   </body>
 </html>
